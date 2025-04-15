@@ -15,6 +15,7 @@ namespace ComputerGraphics
     {
         private readonly Random random = new();
         private readonly Figure figure = new();
+        private Figure currentFigure;
         private readonly IRasterization rast = new Rasterization();
         private readonly ILineDrawer brezenhamLineDrawer;
         private readonly ILineDrawer cuttingLineDrawer;
@@ -33,6 +34,7 @@ namespace ComputerGraphics
 
             brezenhamLineDrawer = new BrezenhamLineDrawer(rast);
             cuttingLineDrawer = new CuttingLineDrawer(rast, brezenhamLineDrawer, Rect, Color.Gray);
+            currentFigure = figure;
 
             pictureBox.Paint += DrawRectangle;
             pictureBox.Paint += Draw;
@@ -73,12 +75,19 @@ namespace ComputerGraphics
 
             using (var graphics = pictureBox.CreateGraphics())
             {
-                figure.DrawFigure(graphics, cuttingLineDrawer, new(x, y), figureColor);
+                currentFigure.DrawFigure(graphics, cuttingLineDrawer, new(x, y), figureColor);
             }
         }
 
         private void clearButton_Click(object sender, EventArgs e)
         {
+            pictureBox.Invalidate();
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            var newSize = 1 + trackBar1.Value / 10f;
+            currentFigure = figure.ResizeFigure(newSize);
             pictureBox.Invalidate();
         }
     }

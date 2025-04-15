@@ -29,37 +29,64 @@ namespace ComputerGraphics
         /// </summary>
         private void InitializeComponent()
         {
-            this.pictureBox = new System.Windows.Forms.PictureBox();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).BeginInit();
-            this.SuspendLayout();
+            pictureBox = new System.Windows.Forms.PictureBox();
+            trackBar1 = new System.Windows.Forms.TrackBar();
+            label1 = new System.Windows.Forms.Label();
+            ((System.ComponentModel.ISupportInitialize)pictureBox).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)trackBar1).BeginInit();
+            SuspendLayout();
             // 
             // pictureBox
             // 
-            this.pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox.Name = "pictureBox";
-            this.pictureBox.Size = new System.Drawing.Size(819, 578);
-            this.pictureBox.TabIndex = 0;
-            this.pictureBox.TabStop = false;
-            this.pictureBox.Click += new System.EventHandler(this.pictureBox_Click);
-            this.pictureBox.Resize += new System.EventHandler(this.pictureBox_Resize);
+            pictureBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            pictureBox.Location = new System.Drawing.Point(0, 0);
+            pictureBox.Name = "pictureBox";
+            pictureBox.Size = new System.Drawing.Size(912, 567);
+            pictureBox.TabIndex = 0;
+            pictureBox.TabStop = false;
+            pictureBox.Click += pictureBox_Click;
+            pictureBox.Resize += pictureBox_Resize;
+            // 
+            // trackBar1
+            // 
+            trackBar1.Location = new System.Drawing.Point(0, 18);
+            trackBar1.Maximum = 5;
+            trackBar1.Minimum = -5;
+            trackBar1.Name = "trackBar1";
+            trackBar1.Size = new System.Drawing.Size(104, 45);
+            trackBar1.TabIndex = 1;
+            trackBar1.Scroll += trackBar1_Scroll;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(7, 0);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(93, 15);
+            label1.TabIndex = 2;
+            label1.Text = "Размер фигуры";
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(819, 578);
-            this.Controls.Add(this.pictureBox);
-            this.Name = "Form1";
-            this.Text = "Form1";
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox)).EndInit();
-            this.ResumeLayout(false);
-
+            AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
+            AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            ClientSize = new System.Drawing.Size(912, 567);
+            Controls.Add(label1);
+            Controls.Add(trackBar1);
+            Controls.Add(pictureBox);
+            Name = "Form1";
+            Text = "Form1";
+            ((System.ComponentModel.ISupportInitialize)pictureBox).EndInit();
+            ((System.ComponentModel.ISupportInitialize)trackBar1).EndInit();
+            ResumeLayout(false);
+            PerformLayout();
         }
 
         #endregion
 
         private System.Windows.Forms.PictureBox pictureBox;
+        private System.Windows.Forms.TrackBar trackBar1;
+        private System.Windows.Forms.Label label1;
     }
 }
 

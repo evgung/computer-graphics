@@ -16,6 +16,7 @@ namespace ComputerGraphics
         private readonly IRasterization rast = new Rasterization();
         private readonly ITriangleFiller triangleFiller;
         private readonly Figure figure = new();
+        private Figure currentFigure;
         private readonly Vector2 leftUpperCorner = new(100, 100);
 
         public Form3()
@@ -23,18 +24,26 @@ namespace ComputerGraphics
             InitializeComponent();
 
             triangleFiller = new TriangleFiller(rast);
+            currentFigure = figure;
 
             pictureBox.Paint += DrawFigure;
         }
 
         private void DrawFigure(object sender, PaintEventArgs e)
         {
-            figure.FillFigure(e.Graphics, triangleFiller, leftUpperCorner);
+            currentFigure.FillFigure(e.Graphics, triangleFiller, leftUpperCorner);
             rast.DrawGrid(e.Graphics);
         }
 
         private void pictureBox_Resize(object sender, EventArgs e)
         {
+            pictureBox.Invalidate();
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            var newSize = 1 + trackBar1.Value / 10f;
+            currentFigure = figure.ResizeFigure(newSize);
             pictureBox.Invalidate();
         }
     }

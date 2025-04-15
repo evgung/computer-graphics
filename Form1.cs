@@ -15,6 +15,7 @@ namespace ComputerGraphics
     {
         private readonly Random random = new();
         private readonly Figure figure = new();
+        private Figure currentFigure;
         private readonly IRasterization rast = new Rasterization();
         private readonly ILineDrawer cdaLineDrawer;
         private readonly ILineDrawer brezenhamLineDrawer;
@@ -29,8 +30,9 @@ namespace ComputerGraphics
             brezenhamBegin = new(pictureBox.Width / 2, 0);
             cdaLineDrawer = new CdaLineDrawer(rast);
             brezenhamLineDrawer = new BrezenhamLineDrawer(rast);
+            currentFigure = figure;
 
-            pictureBox.Paint += DrawBorders;
+            //pictureBox.Paint += DrawBorders;
             pictureBox.Paint += Draw;
         }
 
@@ -48,8 +50,8 @@ namespace ComputerGraphics
         public void Draw(object? sender, PaintEventArgs e)
         {
             rast.DrawGrid(e.Graphics);
-            figure.DrawFigure(e.Graphics, cdaLineDrawer, indent, figureColor);
-            figure.DrawFigure(e.Graphics, brezenhamLineDrawer, indent + brezenhamBegin, figureColor);
+            currentFigure.DrawFigure(e.Graphics, cdaLineDrawer, indent, figureColor);
+            currentFigure.DrawFigure(e.Graphics, brezenhamLineDrawer, indent + brezenhamBegin, figureColor);
         }
 
         private void pictureBox_Resize(object sender, EventArgs e)
@@ -72,6 +74,13 @@ namespace ComputerGraphics
             {
                 brezenhamLineDrawer.DrawLine(from, to, graphics, Color.Gray);
             }
+        }
+
+        private void trackBar1_Scroll(object sender, EventArgs e)
+        {
+            var newSize = 1 + trackBar1.Value / 10f;
+            currentFigure = figure.ResizeFigure(newSize);
+            pictureBox.Invalidate();
         }
     }
 }
