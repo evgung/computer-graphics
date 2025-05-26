@@ -13,7 +13,6 @@ namespace ComputerGraphics
 {
     public interface ILineDrawer
     {
-        public IRasterization Rast { get; }
-        void DrawLine(Vector2 from, Vector2 to, Graphics graphics, Color color);
+        void DrawLine(Vector2 from, Vector2 to, IRasterization rast, Color color);
     }
 }

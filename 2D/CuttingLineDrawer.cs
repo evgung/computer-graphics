@@ -13,23 +13,21 @@ namespace ComputerGraphics
 {
     public class CuttingLineDrawer : ILineDrawer
     {
-        public IRasterization Rast { get; }
         public ILineDrawer MainDrawer { get; }
         public Rectangle CutRect { get; }
         public Color OutsideColor { get; set; }
 
-        public CuttingLineDrawer(IRasterization rast, ILineDrawer mainDrawer, Rectangle cutRect, Color outsideColor)
+        public CuttingLineDrawer(ILineDrawer mainDrawer, Rectangle cutRect, Color outsideColor)
         {
-            Rast = rast;
             MainDrawer = mainDrawer;
             CutRect = cutRect;
             OutsideColor = outsideColor;
         }
 
-        public void DrawLine(Vector2 from, Vector2 to, Graphics graphics, Color color)
+        public void DrawLine(Vector2 from, Vector2 to, IRasterization rast, Color color)
         {
-            from = Rast.ToPixelCoords(from);
-            to = Rast.ToPixelCoords(to);
+            from = rast.ToPixelCoords(from);
+            to = rast.ToPixelCoords(to);
             var fromCode = GetPointCode(from);
             var toCode = GetPointCode(to);
             var newFrom = from;
@@ -39,7 +37,7 @@ namespace ComputerGraphics
             {
                 if ((fromCode & toCode) != 0)
                 {
-                    MainDrawer.DrawLine(from, to, graphics, OutsideColor);
+                    MainDrawer.DrawLine(from, to, rast, OutsideColor);
                     return;
                 }
                 var dx = newTo.X - newFrom.X;
@@ -47,20 +45,20 @@ namespace ComputerGraphics
 
                 if (fromCode != 0)
                 {
-                    newFrom = MovePoint(newFrom, dx, dy);
+                    newFrom = MovePoint(rast, newFrom, dx, dy);
                     fromCode = GetPointCode(newFrom);
                 }
                 else
                 {
-                    newTo = MovePoint(newTo, dx, dy);
+                    newTo = MovePoint(rast, newTo, dx, dy);
                     toCode = GetPointCode(newTo);
                 }
             }
                 
-            DrawCutLine(graphics, color, from, to, newFrom, newTo);
+            DrawCutLine(rast, color, from, to, newFrom, newTo);
         }
 
-        private Vector2 MovePoint(Vector2 point, float dx, float dy)
+        private Vector2 MovePoint(IRasterization rast, Vector2 point, float dx, float dy)
         {
             if (point.X < CutRect.Left)
             {
@@ -83,7 +81,7 @@ namespace ComputerGraphics
                 point.Y = CutRect.Bottom;
             }
 
-            return Rast.ToPixelCoords(point);
+            return rast.ToPixelCoords(point);
         }
         
         private int GetPointCode(Vector2 point)
@@ -98,15 +96,15 @@ namespace ComputerGraphics
             return Convert.ToInt32(code.ToString(), 2);
         }
 
-        private void DrawCutLine(Graphics graphics, Color color, 
+        private void DrawCutLine(IRasterization rast, Color color, 
             Vector2 from, Vector2 to, Vector2 newFrom, Vector2 newTo)
         {
             if (from != newFrom)
-                MainDrawer.DrawLine(from, newFrom, graphics, OutsideColor);
+                MainDrawer.DrawLine(from, newFrom, rast, OutsideColor);
             if (to != newTo)
-                MainDrawer.DrawLine(to, newTo, graphics, OutsideColor);
+                MainDrawer.DrawLine(to, newTo, rast, OutsideColor);
 
-            MainDrawer.DrawLine(newFrom, newTo, graphics, color);
+            MainDrawer.DrawLine(newFrom, newTo, rast, color);
         }
     }
 }

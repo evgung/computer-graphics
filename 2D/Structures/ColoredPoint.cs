@@ -12,11 +12,17 @@ namespace ComputerGraphics
     {
         public Vector2 Point;
         public Color Color;
+        public float? Z;
 
         public ColoredPoint(Vector2 point, Color color)
         {
             Point = point;
             Color = color;
+        }
+
+        public ColoredPoint(Vector2 point, Color color, float z) : this(point, color)
+        {
+            Z = z;
         }
 
         public ColoredPoint Move(Vector2 vector)

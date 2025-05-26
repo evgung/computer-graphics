@@ -13,7 +13,6 @@ namespace ComputerGraphics
 {
     public partial class Form3 : Form
     {
-        private readonly IRasterization rast = new Rasterization();
         private readonly ITriangleFiller triangleFiller;
         private readonly Figure figure = new();
         private Figure currentFigure;
@@ -23,7 +22,7 @@ namespace ComputerGraphics
         {
             InitializeComponent();
 
-            triangleFiller = new TriangleFiller(rast);
+            triangleFiller = new TriangleFiller(false);
             currentFigure = figure;
 
             pictureBox.Paint += DrawFigure;
@@ -31,8 +30,9 @@ namespace ComputerGraphics
 
         private void DrawFigure(object sender, PaintEventArgs e)
         {
-            currentFigure.FillFigure(e.Graphics, triangleFiller, leftUpperCorner);
-            rast.DrawGrid(e.Graphics);
+            var rast = new Rasterization2D(e.Graphics);
+            currentFigure.FillFigure(rast, triangleFiller, leftUpperCorner);
+            rast.DrawGrid();
         }
 
         private void pictureBox_Resize(object sender, EventArgs e)

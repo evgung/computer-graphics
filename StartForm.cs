@@ -31,5 +31,10 @@ namespace ComputerGraphics
         {
             new Form3().Show();
         }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            new Form3D().Show();
+        }
     }
 }

@@ -32,6 +32,7 @@
             label1 = new System.Windows.Forms.Label();
             button2 = new System.Windows.Forms.Button();
             button3 = new System.Windows.Forms.Button();
+            button4 = new System.Windows.Forms.Button();
             SuspendLayout();
             // 
             // button1
@@ -73,11 +74,22 @@
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
+            // button4
+            // 
+            button4.Location = new System.Drawing.Point(258, 230);
+            button4.Name = "button4";
+            button4.Size = new System.Drawing.Size(106, 41);
+            button4.TabIndex = 4;
+            button4.Text = "Курсовая";
+            button4.UseVisualStyleBackColor = true;
+            button4.Click += button4_Click;
+            // 
             // StartForm
             // 
             AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             ClientSize = new System.Drawing.Size(642, 315);
+            Controls.Add(button4);
             Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(label1);
@@ -94,5 +106,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Button button2;
         private System.Windows.Forms.Button button3;
+        private System.Windows.Forms.Button button4;
     }
 }

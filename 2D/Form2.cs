@@ -16,7 +16,6 @@ namespace ComputerGraphics
         private readonly Random random = new();
         private readonly Figure figure = new();
         private Figure currentFigure;
-        private readonly IRasterization rast = new Rasterization();
         private readonly ILineDrawer brezenhamLineDrawer;
         private readonly ILineDrawer cuttingLineDrawer;
         private readonly Color figureColor = Color.Black;
@@ -25,15 +24,19 @@ namespace ComputerGraphics
         {
             InitializeComponent();
 
-            Rect = new(
-                rast.ToPixelCoords(100),
-                rast.ToPixelCoords(100),
-                rast.ToPixelCoords(600),
-                rast.ToPixelCoords(400)
-            );
-
-            brezenhamLineDrawer = new BrezenhamLineDrawer(rast);
-            cuttingLineDrawer = new CuttingLineDrawer(rast, brezenhamLineDrawer, Rect, Color.Gray);
+            using (var graphics = pictureBox.CreateGraphics())
+            {
+                var rast = new Rasterization2D(graphics);
+                Rect = new(
+                    rast.ToPixelCoords(100),
+                    rast.ToPixelCoords(100),
+                    rast.ToPixelCoords(600),
+                    rast.ToPixelCoords(400)
+                );
+            }
+                
+            brezenhamLineDrawer = new BrezenhamLineDrawer();
+            cuttingLineDrawer = new CuttingLineDrawer(brezenhamLineDrawer, Rect, Color.Gray);
             currentFigure = figure;
 
             pictureBox.Paint += DrawRectangle;
@@ -44,22 +47,23 @@ namespace ComputerGraphics
 
         public void DrawRectangle(object? sender, PaintEventArgs e)
         {
-            var graph = e.Graphics;
+            var rast = new Rasterization2D(e.Graphics);
 
             var leftUpper = new Vector2(Rect.Left, Rect.Top);
             var rightUpper = new Vector2(Rect.Right, Rect.Top);
             var leftDown = new Vector2(Rect.Left, Rect.Bottom);
             var rightDown = new Vector2(Rect.Right, Rect.Bottom);
 
-            brezenhamLineDrawer.DrawLine(leftUpper, rightUpper, graph, Color.Red);
-            brezenhamLineDrawer.DrawLine(rightUpper, rightDown, graph, Color.Red);
-            brezenhamLineDrawer.DrawLine(leftDown, rightDown, graph, Color.Red);
-            brezenhamLineDrawer.DrawLine(leftUpper, leftDown, graph, Color.Red);
+            brezenhamLineDrawer.DrawLine(leftUpper, rightUpper, rast, Color.Red);
+            brezenhamLineDrawer.DrawLine(rightUpper, rightDown, rast, Color.Red);
+            brezenhamLineDrawer.DrawLine(leftDown, rightDown, rast, Color.Red);
+            brezenhamLineDrawer.DrawLine(leftUpper, leftDown, rast, Color.Red);
         }
 
         public void Draw(object? sender, PaintEventArgs e)
         {
-            rast.DrawGrid(e.Graphics);
+            var rast = new Rasterization2D(e.Graphics);
+            rast.DrawGrid();
         }
 
         private void pictureBox_Resize(object sender, EventArgs e)
@@ -75,7 +79,8 @@ namespace ComputerGraphics
 
             using (var graphics = pictureBox.CreateGraphics())
             {
-                currentFigure.DrawFigure(graphics, cuttingLineDrawer, new(x, y), figureColor);
+                var rast = new Rasterization2D(graphics);
+                currentFigure.DrawFigure(rast, cuttingLineDrawer, new(x, y), figureColor);
             }
         }
 
